@@ -1,0 +1,22 @@
+services:
+  isorv-db:
+    image: postgres:14-alpine
+    container_name: isorv-db
+    ports:
+      - 6541:5432
+    environment:
+      - POSTGRES_DB=isorv
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+  isorv-app:
+    build: .
+    container_name: isorv-app
+    ports:
+      - 8080:8080
+    depends_on:
+      - isorv-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://isorv-db:5432/isorv
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
